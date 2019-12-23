@@ -39,6 +39,7 @@ from paddle.fluid.incubate.fleet.collective import fleet, DistributedStrategy
 import paddle.fluid.incubate.fleet.base.role_maker as role_maker
 from paddle.fluid import compiler
 import paddle.fluid.profiler as profiler
+from paddle.fluid.transpiler.details import program_to_code
 
 num_trainers = int(os.environ.get('PADDLE_TRAINERS_NUM', 1))
 trainer_id = int(os.environ.get('PADDLE_TRAINER_ID'))
@@ -310,6 +311,7 @@ def build_program(is_train, main_prog, startup_prog, args, dist_strategy=None):
                                                                        use_dynamic_loss_scaling=args.use_dynamic_loss_scaling)
                 dist_optimizer = fleet.distributed_optimizer(optimizer, strategy=dist_strategy)
                 _, param_grads = dist_optimizer.minimize(avg_cost)
+                program_to_code(main_prog)
 
                 global_lr.persistable=True
                 build_program_out.append(global_lr)
