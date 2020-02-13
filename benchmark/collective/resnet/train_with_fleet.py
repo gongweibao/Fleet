@@ -361,6 +361,7 @@ def train(args):
     if not args.fuse:
         dist_strategy.fuse_all_reduce_ops = False
     dist_strategy.nccl_comm_num = args.nccl_comm_num
+    dist_strategy.use_hierarchical_allreduce = args.use_hierarchical_allreduce
     dist_strategy.fuse_elewise_add_act_ops=args.fuse_elewise_add_act_ops
     dist_strategy.fuse_bn_act_ops = args.fuse_bn_act_ops
 
